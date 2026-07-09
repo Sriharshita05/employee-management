@@ -1,20 +1,21 @@
-FROM php:8.4-cli
+FROM php:8.4-apache
+
+RUN docker-php-ext-install pdo pdo_mysql
+
+RUN a2enmod rewrite
 
 WORKDIR /var/www/html
 
 COPY . .
 
-RUN apt-get update && apt-get install -y \
-    unzip \
-    git \
-    curl
-
-RUN docker-php-ext-install pdo pdo_mysql
-
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+    && php -r "unlink('composer-setup.php');"
 
 RUN composer install --no-dev --optimize-autoloader
 
-EXPOSE 10000
+RUN chown -R www-data:www-data storage bootstrap/cache
 
-php artisan serve --host=0.0.0.0 --port=$PORT
+EXPOSE 80
+
+CMD ["apache2-foreground"]
