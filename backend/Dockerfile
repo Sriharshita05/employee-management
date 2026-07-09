@@ -1,6 +1,8 @@
 # Railway rebuild trigger
 FROM php:8.4-apache
+
 # force railway rebuild
+
 RUN apt-get update && apt-get install -y \
     unzip \
     zip \
@@ -8,6 +10,10 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install pdo pdo_mysql zip
 
 RUN a2enmod rewrite
+
+# Fix Apache MPM conflict
+RUN a2dismod mpm_event mpm_worker || true
+RUN a2enmod mpm_prefork
 
 WORKDIR /var/www/html
 
