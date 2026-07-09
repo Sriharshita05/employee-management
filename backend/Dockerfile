@@ -40,3 +40,5 @@ RUN chmod +x /usr/local/bin/start.sh
 CMD ["/usr/local/bin/start.sh"]
 
 EXPOSE 80
+
+CMD ["apache2-foreground"]
