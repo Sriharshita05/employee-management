@@ -1,7 +1,4 @@
-# Railway rebuild trigger
 FROM php:8.4-apache
-
-# force railway rebuild
 
 RUN apt-get update && apt-get install -y \
     unzip \
@@ -9,11 +6,11 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     && docker-php-ext-install pdo pdo_mysql zip
 
-RUN a2enmod rewrite
+# Disable all Apache MPM modules first
+RUN a2dismod mpm_event mpm_worker mpm_prefork || true
 
-# Fix Apache MPM conflict
-RUN a2dismod mpm_event mpm_worker || true
-RUN a2enmod mpm_prefork
+# Enable only prefork (required for PHP module)
+RUN a2enmod mpm_prefork rewrite
 
 WORKDIR /var/www/html
 
@@ -25,7 +22,6 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 
 RUN composer install --no-dev --optimize-autoloader
 
-# Laravel public directory
 RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf
 
 RUN chown -R www-data:www-data storage bootstrap/cache
