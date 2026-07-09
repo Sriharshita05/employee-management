@@ -33,4 +33,10 @@ RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 # Laravel permissions
 RUN chown -R www-data:www-data storage bootstrap/cache
 
+COPY start.sh /usr/local/bin/start.sh
+
+RUN chmod +x /usr/local/bin/start.sh
+
+CMD ["/usr/local/bin/start.sh"]
+
 EXPOSE 80
