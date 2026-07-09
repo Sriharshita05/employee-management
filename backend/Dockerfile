@@ -1,6 +1,6 @@
 # Railway rebuild trigger
 FROM php:8.4-apache
-
+# force railway rebuild
 RUN apt-get update && apt-get install -y \
     unzip \
     zip \
