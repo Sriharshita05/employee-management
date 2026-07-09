@@ -18,9 +18,19 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 
 RUN composer install --no-dev --optimize-autoloader
 
-# Change Apache root to Laravel public folder
+# Set Laravel public directory as Apache document root
 RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf
 
+# Enable .htaccess overrides for Laravel routing
+RUN echo '<Directory /var/www/html/public>\n\
+    AllowOverride All\n\
+    Require all granted\n\
+</Directory>' >> /etc/apache2/apache2.conf
+
+# Avoid Apache ServerName warning
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+# Laravel permissions
 RUN chown -R www-data:www-data storage bootstrap/cache
 
 EXPOSE 80
