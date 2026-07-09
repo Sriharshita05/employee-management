@@ -1,0 +1,199 @@
+@import "tailwindcss";
+
+/* ─── Google Fonts ───
+   Fraunces: a warm, slightly editorial serif used sparingly for numbers
+   and headings — pairs with Inter's neutrality without reading as a
+   generic SaaS dashboard. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap');
+
+/* ─── Custom Design Tokens ─── */
+:root {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Fraunces', 'Inter', system-ui, serif;
+  --sidebar-width: 260px;
+  --navbar-height: 64px;
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-default: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Palette — light theme. Neutral #F5F5F5 page background, white
+     surfaces (cards/tables/modals/sidebar/navbar), black primary text,
+     and a deep crimson (#AA1C41) accent throughout. */
+  --color-bg: #F5F5F5;
+  --color-surface: #FFFFFF;
+  --color-border: #E5E7EB;
+  --color-border-input: #D1D5DB;
+  --color-table-hover: #F9FAFB;
+
+  --color-text: #000000;
+  --color-text-body: #000000;
+  --color-text-secondary: #4B5563;
+  --color-text-muted: #6B7280;
+
+  --color-accent: #AA1C41;
+  --color-accent-hover: #8E1737;
+  --color-accent-active: #74122D;
+  --color-accent-tint: rgba(170, 28, 65, 0.1);
+  --color-accent-ring: rgba(170, 28, 65, 0.2);
+  --color-gold: #f0b860;
+
+  --color-plum: #b891c7;
+  --color-plum-light: #d4b3e0;
+
+  --color-glass: rgba(255, 255, 255, 0.6);
+  --color-navbar-glass: rgba(255, 255, 255, 0.85);
+  --color-shadow: rgba(0, 0, 0, 0.1);
+  --color-shadow-soft: rgba(0, 0, 0, 0.06);
+
+  --color-overlay-soft: rgba(0, 0, 0, 0.03);
+  --color-overlay-medium: rgba(0, 0, 0, 0.06);
+  --color-overlay-strong: rgba(0, 0, 0, 0.09);
+}
+
+/* Palette — dark theme. Deep slate page background, elevated slate
+   surfaces (cards/tables/modals/sidebar/navbar), off-white primary
+   text, and a brighter crimson-pink accent for contrast on dark. */
+[data-theme='dark'] {
+  --color-bg: #101116;
+  --color-surface: #191B22;
+  --color-border: #2B2E38;
+  --color-border-input: #3A3D4A;
+  --color-table-hover: #21232C;
+
+  --color-text: #F4F4F6;
+  --color-text-body: #F4F4F6;
+  --color-text-secondary: #C6C8D0;
+  --color-text-muted: #8B8E9A;
+
+  --color-accent: #E14D77;
+  --color-accent-hover: #EA6B90;
+  --color-accent-active: #C43D64;
+  --color-accent-tint: rgba(225, 77, 119, 0.16);
+  --color-accent-ring: rgba(225, 77, 119, 0.3);
+  --color-gold: #f3c579;
+
+  --color-plum: #c9a4d9;
+  --color-plum-light: #ddbdeb;
+
+  --color-glass: rgba(25, 27, 34, 0.6);
+  --color-navbar-glass: rgba(20, 22, 28, 0.85);
+  --color-shadow: rgba(0, 0, 0, 0.45);
+  --color-shadow-soft: rgba(0, 0, 0, 0.3);
+
+  --color-overlay-soft: rgba(255, 255, 255, 0.05);
+  --color-overlay-medium: rgba(255, 255, 255, 0.08);
+  --color-overlay-strong: rgba(255, 255, 255, 0.12);
+}
+
+/* ─── Base Reset ─── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--color-bg);
+  color: var(--color-text);
+  transition: background-color var(--transition-default), color var(--transition-default);
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  text-align: left;
+  border: none;
+  min-height: 100vh;
+  display: flex;
+}
+
+/* ─── Custom Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+/* ─── Animations ─── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out both;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.4s ease-out both;
+}
+
+/* Staggered animation delays */
+.delay-1 { animation-delay: 0.05s; }
+.delay-2 { animation-delay: 0.1s; }
+.delay-3 { animation-delay: 0.15s; }
+.delay-4 { animation-delay: 0.2s; }
+.delay-5 { animation-delay: 0.25s; }
+
+/* ─── Glassmorphism Utility ─── */
+.glass {
+  background: var(--color-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border);
+}
+
+/* ─── Gradient text ─── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-accent), var(--color-gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Skeleton loading ─── */
+.skeleton {
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0.12) 50%, rgba(0, 0, 0, 0.06) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
