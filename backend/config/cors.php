@@ -24,7 +24,7 @@ return [
 
     'allowed_origins' => array_filter(array_map('trim', explode(',', env(
         'FRONTEND_URLS',
-        'http://localhost:5173,http://127.0.0.1:5173','https://employee-management-psi-steel.vercel.app','https://employee-management-psi-steel.vercel.app'
+        'http://localhost:5173,http://127.0.0.1:5173',
     )))),
 
     'allowed_origins_patterns' => [],
