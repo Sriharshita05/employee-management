@@ -1,6 +1,10 @@
 FROM php:8.4-apache
 
-RUN docker-php-ext-install pdo pdo_mysql
+RUN apt-get update && apt-get install -y \
+    unzip \
+    zip \
+    libzip-dev \
+    && docker-php-ext-install pdo pdo_mysql zip
 
 RUN a2enmod rewrite
 
@@ -15,7 +19,3 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 RUN composer install --no-dev --optimize-autoloader
 
 RUN chown -R www-data:www-data storage bootstrap/cache
-
-EXPOSE 80
-
-CMD ["apache2-foreground"]
