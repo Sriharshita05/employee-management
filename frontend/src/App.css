@@ -2100,3 +2100,104 @@ body.compact-mode .notif-item {
   color: #f87171;
   border-color: rgba(248, 113, 113, 0.25);
 }
+
+/* ─── Leave Requests & Audit Log ─── */
+.status-badge.pending {
+  background: rgba(245, 158, 11, 0.1);
+  color: #fbbf24;
+}
+
+.status-badge.approved {
+  background: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+}
+
+.status-badge.rejected {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+}
+
+.status-badge.cancelled {
+  background: var(--color-overlay-medium);
+  color: var(--color-text-muted);
+}
+
+.status-badge.pending .status-dot { background: #fbbf24; }
+.status-badge.approved .status-dot { background: #34d399; }
+.status-badge.rejected .status-dot { background: #f87171; }
+.status-badge.cancelled .status-dot { background: var(--color-text-muted); }
+
+/* Audit actions reuse the badge shape: created = green, updated = amber, deleted = red. */
+.status-badge.audit-created {
+  background: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+}
+
+.status-badge.audit-updated {
+  background: rgba(245, 158, 11, 0.1);
+  color: #fbbf24;
+}
+
+.status-badge.audit-deleted {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+}
+
+.status-badge.audit-created .status-dot { background: #34d399; }
+.status-badge.audit-updated .status-dot { background: #fbbf24; }
+.status-badge.audit-deleted .status-dot { background: #f87171; }
+
+.filter-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 12px 24px 0;
+  flex-wrap: wrap;
+}
+
+.filter-tab {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.filter-tab:hover {
+  background: var(--color-overlay-soft);
+  color: var(--color-text);
+}
+
+.filter-tab.active {
+  background: var(--color-accent-tint);
+  border-color: var(--color-accent-ring);
+  color: var(--color-accent);
+}
+
+.leave-balance-hint {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--color-overlay-soft);
+  border: 1px solid var(--color-border);
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.audit-change {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+  word-break: break-word;
+}
+
+.action-btn-edit:disabled,
+.action-btn-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}

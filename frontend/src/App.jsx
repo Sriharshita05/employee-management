@@ -8,6 +8,8 @@ import Dashboard from './pages/Dashboard';
 import Employees from './pages/Employees';
 import Departments from './pages/Departments';
 import Attendance from './pages/Attendance';
+import Leaves from './pages/Leaves';
+import AuditLog from './pages/AuditLog';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 import Documentation from './pages/Documentation';
@@ -58,6 +60,21 @@ function App() {
             />
 
             <Route path="attendance" element={<Attendance />} />
+
+            {/* Leave requests: visible to every role; the page itself shows
+                file/cancel controls to admin/hr and approve/reject to
+                admin/manager, matching the API's role middleware. */}
+            <Route path="leaves" element={<Leaves />} />
+
+            {/* Audit log: admin-only. */}
+            <Route
+              path="audit-log"
+              element={
+                <ProtectedRoute allowedRoles={[ROLES.ADMIN]}>
+                  <AuditLog />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Reports: admin-only per the permission table. */}
             <Route

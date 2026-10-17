@@ -9,6 +9,7 @@ use Database\Seeders\EmployeeSeeder;
 use Database\Seeders\DepartmentSeeder;
 use Database\Seeders\AttendanceSeeder;
 use Database\Seeders\AdminSeeder;
+use Database\Seeders\LeaveRequestSeeder;
 use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
@@ -24,6 +25,8 @@ class DatabaseSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         // Truncate tables to avoid duplicate entries on re‑run
         DB::table('users')->truncate();
+        DB::table('audit_logs')->truncate();
+        DB::table('leave_requests')->truncate();
         DB::table('attendance')->truncate();
         DB::table('employees')->truncate();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
@@ -35,5 +38,6 @@ class DatabaseSeeder extends Seeder
         $this->call(DepartmentSeeder::class);
         $this->call(EmployeeSeeder::class);
         $this->call(AttendanceSeeder::class);
+        $this->call(LeaveRequestSeeder::class);
     }
 }

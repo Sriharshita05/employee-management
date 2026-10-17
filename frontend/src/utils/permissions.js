@@ -30,6 +30,11 @@ export const PERMISSIONS = {
   MANAGE_USERS: 'manage_users',
   VIEW_REPORTS: 'view_reports',
   MARK_ATTENDANCE: 'mark_attendance',
+  // Every role can view leave requests. Filing/cancelling is separate from
+  // approving/rejecting, mirroring the role middleware on the API.
+  CREATE_LEAVE: 'create_leave',
+  DECIDE_LEAVE: 'decide_leave',
+  VIEW_AUDIT_LOG: 'view_audit_log',
 };
 
 // Which permissions each role holds.
@@ -44,6 +49,9 @@ const ROLE_PERMISSIONS = {
     PERMISSIONS.MANAGE_USERS,
     PERMISSIONS.VIEW_REPORTS,
     PERMISSIONS.MARK_ATTENDANCE,
+    PERMISSIONS.CREATE_LEAVE,
+    PERMISSIONS.DECIDE_LEAVE,
+    PERMISSIONS.VIEW_AUDIT_LOG,
   ],
   [ROLES.HR]: [
     PERMISSIONS.VIEW_DASHBOARD,
@@ -51,9 +59,11 @@ const ROLE_PERMISSIONS = {
     PERMISSIONS.EDIT_EMPLOYEE,
     PERMISSIONS.VIEW_DEPARTMENTS,
     PERMISSIONS.MARK_ATTENDANCE,
+    PERMISSIONS.CREATE_LEAVE,
   ],
   [ROLES.MANAGER]: [
     PERMISSIONS.VIEW_DASHBOARD,
+    PERMISSIONS.DECIDE_LEAVE,
   ],
 };
 

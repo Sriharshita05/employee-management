@@ -18,7 +18,14 @@ function getPageList(currentPage, totalPages) {
   return pages;
 }
 
-function Pagination({ currentPage, totalPages, totalItems, pageSize, onPageChange }) {
+function Pagination({
+  currentPage,
+  totalPages,
+  totalItems,
+  pageSize,
+  onPageChange,
+  itemLabel = 'employees',
+}) {
   if (totalItems === 0 || totalPages <= 1) return null;
 
   const startItem = (currentPage - 1) * pageSize + 1;
@@ -29,7 +36,7 @@ function Pagination({ currentPage, totalPages, totalItems, pageSize, onPageChang
     <div className="pagination-bar">
       <div className="pagination-summary">
         Showing <strong>{startItem}</strong>–<strong>{endItem}</strong> of{' '}
-        <strong>{totalItems}</strong> employees
+        <strong>{totalItems}</strong> {itemLabel}
       </div>
       <div className="pagination-controls">
         <button

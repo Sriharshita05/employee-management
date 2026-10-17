@@ -1,0 +1,81 @@
+# Runs the whole stack locally: MySQL, the Laravel API, a queue worker for
+# emails, and the React app.
+#
+#   cp .env.docker.example .env      # then set APP_KEY (see the file)
+#   docker compose up --build
+#
+# React app: http://localhost:5173   API: http://localhost:8000/api
+
+x-backend-env: &backend-env
+  APP_ENV: local
+  APP_DEBUG: "true"
+  APP_KEY: ${APP_KEY:?Set APP_KEY in .env (copy .env.docker.example and see the comment in it)}
+  APP_URL: http://localhost:8000
+  FRONTEND_URL: http://localhost:5173
+  FRONTEND_URLS: http://localhost:5173
+  DB_CONNECTION: mysql
+  DB_HOST: db
+  DB_PORT: "3306"
+  DB_DATABASE: ${DB_DATABASE:-employee_management}
+  DB_USERNAME: ${DB_USERNAME:-ems}
+  DB_PASSWORD: ${DB_PASSWORD:-ems_password}
+  QUEUE_CONNECTION: database
+  CACHE_STORE: database
+  SESSION_DRIVER: array
+  # Log to the container output so no root-owned log file is created.
+  LOG_CHANNEL: stderr
+  # Emails are written to the log; point MAIL_* at a real SMTP server to send them.
+  MAIL_MAILER: log
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-employee_management}
+      MYSQL_USER: ${DB_USERNAME:-ems}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-ems_password}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_password}
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p${DB_ROOT_PASSWORD:-root_password}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: ./backend
+    image: employee-management-backend
+    environment: *backend-env
+    ports:
+      - "8000:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    # Apply migrations, then start Apache. Use `docker compose exec app
+    # php artisan db:seed --force` to load the demo data.
+    command: ["sh", "-c", "php artisan migrate --force && apache2-foreground"]
+
+  # Processes queued jobs, such as the leave approval emails.
+  worker:
+    image: employee-management-backend
+    environment: *backend-env
+    user: www-data
+    depends_on:
+      app:
+        condition: service_started
+    command: ["php", "artisan", "queue:work", "--tries=3", "--sleep=3", "--max-time=3600"]
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: http://localhost:8000
+    ports:
+      - "5173:80"
+    depends_on:
+      - app
+
+volumes:
+  db-data:

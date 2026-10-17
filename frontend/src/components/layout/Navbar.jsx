@@ -12,6 +12,8 @@ function getPageTitle(pathname) {
   if (pathname.startsWith('/employees')) return ROUTE_TITLES.employees;
   if (pathname.startsWith('/departments')) return ROUTE_TITLES.departments;
   if (pathname.startsWith('/attendance')) return ROUTE_TITLES.attendance;
+  if (pathname.startsWith('/leaves')) return ROUTE_TITLES.leaves;
+  if (pathname.startsWith('/audit-log')) return ROUTE_TITLES.audit;
   if (pathname.startsWith('/reports')) return ROUTE_TITLES.reports;
   if (pathname.startsWith('/settings')) return ROUTE_TITLES.settings;
   if (pathname.startsWith('/documentation')) return ROUTE_TITLES.docs;

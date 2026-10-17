@@ -33,6 +33,21 @@ class UserFactory extends Factory
         ];
     }
 
+    public function admin(): static
+    {
+        return $this->state(fn () => ['role' => User::ROLE_ADMIN, 'is_admin' => true]);
+    }
+
+    public function hr(): static
+    {
+        return $this->state(fn () => ['role' => User::ROLE_HR, 'is_admin' => false]);
+    }
+
+    public function manager(): static
+    {
+        return $this->state(fn () => ['role' => User::ROLE_MANAGER, 'is_admin' => false]);
+    }
+
     /**
      * Indicate that the model's email address should be unverified.
      */

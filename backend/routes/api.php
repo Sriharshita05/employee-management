@@ -7,9 +7,12 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LeaveRequestController;
+use App\Http\Controllers\AuditLogController;
 
 // ── Public auth routes ──────────────────────────────────────────────
-Route::post('login', [AuthController::class, 'login']);
+// Throttled to slow down password guessing: 10 attempts per minute per IP.
+Route::post('login', [AuthController::class, 'login'])->middleware('throttle:10,1');
 
 // ── Protected routes (require a valid Sanctum bearer token) ────────
 // RBAC: the role:... middleware below mirrors the permission table —
@@ -58,9 +61,27 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('attendance/{id}', [AttendanceController::class, 'destroy']);
     });
 
-    // Reports: admin-only per the permission table.
+    // Leave requests: every role can view requests and balances. Admin/hr
+    // file a request on an employee's behalf (employees have no login) and
+    // may withdraw one that is still pending. Admin/manager make the
+    // approve/reject decision, so filing and approving are separate duties.
+    Route::middleware('role:admin,hr,manager')->group(function () {
+        Route::get('leave-requests', [LeaveRequestController::class, 'index']);
+        Route::get('leave-balances/{employee}', [LeaveRequestController::class, 'balance']);
+    });
+    Route::middleware('role:admin,hr')->group(function () {
+        Route::post('leave-requests', [LeaveRequestController::class, 'store']);
+        Route::post('leave-requests/{leaveRequest}/cancel', [LeaveRequestController::class, 'cancel']);
+    });
+    Route::middleware('role:admin,manager')->group(function () {
+        Route::post('leave-requests/{leaveRequest}/approve', [LeaveRequestController::class, 'approve']);
+        Route::post('leave-requests/{leaveRequest}/reject', [LeaveRequestController::class, 'reject']);
+    });
+
+    // Reports and audit trail: admin-only per the permission table.
     Route::middleware('role:admin')->group(function () {
         Route::get('reports/overview', [ReportController::class, 'overview']);
+        Route::get('audit-logs', [AuditLogController::class, 'index']);
     });
 
     // User management: admin-only.

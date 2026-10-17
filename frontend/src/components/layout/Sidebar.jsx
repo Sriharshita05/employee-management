@@ -18,6 +18,7 @@ const navItems = [
     roles: [ROLES.ADMIN, ROLES.HR],
   },
   { id: 'attendance', path: '/attendance', label: 'Attendance', icon: <Icons.Calendar /> },
+  { id: 'leaves', path: '/leaves', label: 'Leave Requests', icon: <Icons.Briefcase /> },
   {
     id: 'reports',
     path: '/reports',
@@ -30,6 +31,13 @@ const navItems = [
     path: '/users',
     label: 'Manage Users',
     icon: <Icons.UserCheck />,
+    roles: [ROLES.ADMIN],
+  },
+  {
+    id: 'audit',
+    path: '/audit-log',
+    label: 'Audit Log',
+    icon: <Icons.FileText />,
     roles: [ROLES.ADMIN],
   },
 ];

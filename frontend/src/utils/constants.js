@@ -45,11 +45,28 @@ export const ATTENDANCE_STATUS_META = {
   on_leave: { label: 'On Leave', className: 'on-leave' },
 };
 
+export const LEAVE_TYPE_OPTIONS = [
+  { value: 'annual', label: 'Annual' },
+  { value: 'sick', label: 'Sick' },
+  { value: 'casual', label: 'Casual' },
+  { value: 'unpaid', label: 'Unpaid' },
+];
+
+export const LEAVE_STATUS_OPTIONS = [
+  { value: '', label: 'All' },
+  { value: 'pending', label: 'Pending' },
+  { value: 'approved', label: 'Approved' },
+  { value: 'rejected', label: 'Rejected' },
+  { value: 'cancelled', label: 'Cancelled' },
+];
+
 export const ROUTE_TITLES = {
   dashboard: 'Dashboard',
   employees: 'Employees',
   departments: 'Departments',
   attendance: 'Attendance',
+  leaves: 'Leave Requests',
+  audit: 'Audit Log',
   reports: 'Reports',
   settings: 'Settings',
   docs: 'Documentation',
@@ -111,6 +128,15 @@ export function formatDateShort(dateStr) {
   if (!dateStr) return '';
   const date = new Date(`${dateStr}T00:00:00`);
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+/**
+ * "Oct 26 – Oct 28, 2026", or a single date when start and end match.
+ */
+export function formatDateRange(start, end) {
+  if (!start) return '';
+  if (!end || start === end) return `${formatDateShort(start)}, ${start.slice(0, 4)}`;
+  return `${formatDateShort(start)} – ${formatDateShort(end)}, ${end.slice(0, 4)}`;
 }
 
 export function timeAgo(dateStr) {
